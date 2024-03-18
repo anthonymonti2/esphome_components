@@ -18,7 +18,6 @@ template<typename... Ts>
 class DfrobotSen0521SettingsAction : public Action<Ts...>, public Parented<DfrobotSen0521Component> {
  public:
   TEMPLATABLE_VALUE(int8_t, factory_reset)
-  TEMPLATABLE_VALUE(int8_t, start_after_power_on)
   TEMPLATABLE_VALUE(int8_t, turn_on_led)
   TEMPLATABLE_VALUE(int8_t, presence_via_uart)
   TEMPLATABLE_VALUE(int8_t, sensitivity)
@@ -26,12 +25,6 @@ class DfrobotSen0521SettingsAction : public Action<Ts...>, public Parented<Dfrob
   TEMPLATABLE_VALUE(float, delay_after_disappear)
   TEMPLATABLE_VALUE(float, det_min1)
   TEMPLATABLE_VALUE(float, det_max1)
-  TEMPLATABLE_VALUE(float, det_min2)
-  TEMPLATABLE_VALUE(float, det_max2)
-  TEMPLATABLE_VALUE(float, det_min3)
-  TEMPLATABLE_VALUE(float, det_max3)
-  TEMPLATABLE_VALUE(float, det_min4)
-  TEMPLATABLE_VALUE(float, det_max4)
 
   void play(Ts... x) {
     this->parent_->enqueue(make_unique<PowerCommand>(0));
@@ -51,12 +44,6 @@ class DfrobotSen0521SettingsAction : public Action<Ts...>, public Parented<Dfrob
       float disappear = this->delay_after_disappear_.value(x...);
       if (detect >= 0 && disappear >= 0) {
         this->parent_->enqueue(make_unique<SetLatencyCommand>(detect, disappear));
-      }
-    }
-    if (this->start_after_power_on_.has_value()) {
-      int8_t val = this->start_after_power_on_.value(x...);
-      if (val >= 0) {
-        this->parent_->enqueue(make_unique<SensorCfgStartCommand>(val));
       }
     }
     if (this->turn_on_led_.has_value()) {

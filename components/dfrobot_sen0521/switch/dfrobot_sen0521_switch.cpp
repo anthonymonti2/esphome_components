@@ -36,7 +36,6 @@ void Sen0521StartAfterBootSwitch::write_state(bool state) {
     was_active = true;
     this->parent_->enqueue(make_unique<PowerCommand>(false));
   }
-  this->parent_->enqueue(make_unique<SensorCfgStartCommand>(state));
   this->parent_->enqueue(make_unique<SaveCfgCommand>());
   if (was_active) {
     this->parent_->enqueue(make_unique<PowerCommand>(true));
