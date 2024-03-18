@@ -18,7 +18,6 @@ template<typename... Ts>
 class DfrobotSen0521SettingsAction : public Action<Ts...>, public Parented<DfrobotSen0521Component> {
  public:
   TEMPLATABLE_VALUE(int8_t, factory_reset)
-  TEMPLATABLE_VALUE(int8_t, turn_on_led)
   TEMPLATABLE_VALUE(int8_t, presence_via_uart)
   TEMPLATABLE_VALUE(int8_t, sensitivity)
   TEMPLATABLE_VALUE(float, delay_after_detect)
@@ -44,12 +43,6 @@ class DfrobotSen0521SettingsAction : public Action<Ts...>, public Parented<Dfrob
       float disappear = this->delay_after_disappear_.value(x...);
       if (detect >= 0 && disappear >= 0) {
         this->parent_->enqueue(make_unique<SetLatencyCommand>(detect, disappear));
-      }
-    }
-    if (this->turn_on_led_.has_value()) {
-      int8_t val = this->turn_on_led_.value(x...);
-      if (val >= 0) {
-        this->parent_->enqueue(make_unique<LedModeCommand>(val));
       }
     }
     if (this->presence_via_uart_.has_value()) {
